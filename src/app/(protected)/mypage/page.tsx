@@ -5,11 +5,11 @@ export default async function MyPage() {
 
   return (
     <div>
-      {session?.user?.name}
+      {JSON.stringify(session)}
       <form
         action={async () => {
           'use server';
-          await signOut();
+          await signOut({ redirectTo: '/login' });
         }}
       >
         <button>로그아웃</button>

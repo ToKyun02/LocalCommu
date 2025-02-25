@@ -17,4 +17,10 @@ export default class UserDao {
       return null;
     }
   }
+  static async updateEmailVerified(id: string) {
+    await db.user.update({
+      where: { id },
+      data: { emailVerified: new Date() },
+    });
+  }
 }

@@ -27,7 +27,7 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const urlError =
     searchParams.get('error') === 'OAuthAccountNotLinked'
-      ? '다른 소셜 계정에서 사용된 이메일임'
+      ? '다른 소셜 계정에서 사용된 이메일입니다.'
       : '';
 
   const [isPending, startTransition] = useTransition();
@@ -59,6 +59,7 @@ export default function LoginForm() {
       headerLabel='다시 만나서 반가워요!'
       backButtonLabel='계정이 없으신가요?'
       backButtonHref='/signup'
+      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>

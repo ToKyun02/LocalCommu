@@ -5,12 +5,15 @@ import { signIn } from 'next-auth/react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaGithub } from 'react-icons/fa';
 import { RiKakaoTalkFill } from 'react-icons/ri';
+import { SiNaver } from 'react-icons/si';
+
 import { Button } from '@/components/ui/button';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 export default function Social() {
-  const onClick = (provider: 'google' | 'github' | 'kakao') => {
+  const onClick = (provider: 'google' | 'github' | 'kakao' | 'naver') => {
     signIn(provider, {
-      callbackUrl: '/mypage',
+      callbackUrl: DEFAULT_LOGIN_REDIRECT,
     });
   };
 
@@ -36,9 +39,17 @@ export default function Social() {
         size='lg'
         className='w-full'
         variant='outline'
-        onClick={() => onClick('github')}
+        onClick={() => onClick('kakao')}
       >
         <RiKakaoTalkFill className='size-5' />
+      </Button>
+      <Button
+        size='lg'
+        className='w-full'
+        variant='outline'
+        onClick={() => onClick('naver')}
+      >
+        <SiNaver className='size-5' />
       </Button>
     </div>
   );

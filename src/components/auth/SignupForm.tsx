@@ -51,7 +51,8 @@ export default function RegisterForm() {
     <CardWrapper
       headerLabel='회원가입'
       backButtonLabel='이미 계정이 있나요?'
-      backButtonHref='/auth/login'
+      backButtonHref='/login'
+      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
