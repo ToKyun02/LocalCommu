@@ -3,6 +3,7 @@
 import { useKakao } from '@/context/KakaoContext';
 import { placesSearchCB } from '@/lib/kakaoMap';
 import { useEffect } from 'react';
+import SearchList from './SearchList';
 
 declare global {
   interface Window {
@@ -62,7 +63,9 @@ export default function KakaoMap() {
 
   return (
     <>
-      <div id='map' className='relative size-full'></div>
+      <div id='map' className='relative size-full'>
+        <SearchList />
+      </div>
     </>
   );
 }
