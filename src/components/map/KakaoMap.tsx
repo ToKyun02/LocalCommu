@@ -1,7 +1,6 @@
 'use client';
 
 import { useKakao } from '@/context/KakaoContext';
-import { placesSearchCB } from '@/lib/kakaoMap';
 import { useEffect } from 'react';
 import SearchList from './SearchList';
 
@@ -17,7 +16,7 @@ declare global {
  * @returns 카카오 지도 컴포넌트
  */
 export default function KakaoMap() {
-  const { kakao, setKakao } = useKakao();
+  const { setKakao } = useKakao();
 
   useEffect(() => {
     const kakaoMapScript = document.createElement('script');
@@ -48,18 +47,6 @@ export default function KakaoMap() {
       document.head.removeChild(kakaoMapScript);
     };
   }, []);
-
-  useEffect(() => {
-    if (kakao) {
-      kakao.place.keywordSearch(
-        '이태원 맛집',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (data: any, status: any, pagination: any) => {
-          placesSearchCB(data, status, pagination, kakao);
-        },
-      );
-    }
-  }, [kakao]);
 
   return (
     <>
