@@ -1,5 +1,7 @@
 'use client';
 
+import { useKakao } from '@/context/KakaoContext';
+import { placesSearchCB } from '@/lib/kakaoMap';
 import { useEffect } from 'react';
 
 declare global {
@@ -14,10 +16,12 @@ declare global {
  * @returns 카카오 지도 컴포넌트
  */
 export default function KakaoMap() {
+  const { kakao, setKakao } = useKakao();
+
   useEffect(() => {
     const kakaoMapScript = document.createElement('script');
     kakaoMapScript.async = false;
-    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false`;
+    kakaoMapScript.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_API_KEY}&autoload=false&libraries=services`;
     document.head.appendChild(kakaoMapScript);
 
     const onLoadKakaoAPI = () => {
@@ -28,7 +32,11 @@ export default function KakaoMap() {
           level: 3,
         };
 
-        new window.kakao.maps.Map(container, options);
+        setKakao({
+          map: new window.kakao.maps.Map(container, options),
+          place: new window.kakao.maps.services.Places(),
+          infowindow: new window.kakao.maps.InfoWindow({ zIndex: 1 }),
+        });
       });
     };
 
@@ -39,9 +47,22 @@ export default function KakaoMap() {
       document.head.removeChild(kakaoMapScript);
     };
   }, []);
+
+  useEffect(() => {
+    if (kakao) {
+      kakao.place.keywordSearch(
+        '이태원 맛집',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (data: any, status: any, pagination: any) => {
+          placesSearchCB(data, status, pagination, kakao);
+        },
+      );
+    }
+  }, [kakao]);
+
   return (
     <>
-      <div id='map' style={{ width: '50%', height: '350px' }}></div>
+      <div id='map' className='relative size-full'></div>
     </>
   );
 }
