@@ -25,3 +25,8 @@ export const signupSchema = z.object({
     message: '비밀번호는 8글자 이상 입력해주세요.',
   }),
 });
+
+export const postCreateSchema = z.object({
+  title: z.string().min(1, '제목은 필수입니다.'),
+  content: z.string().min(1, '내용은 필수입니다.'),
+});

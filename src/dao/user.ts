@@ -12,7 +12,8 @@ export default class UserDao {
       });
       return { success: '회원가입이 완료되었습니다!' };
     } catch (error) {
-      return { error };
+      console.error(error);
+      return { error: '회원가입 도중 오류가 발생했습니다.' };
     }
   }
 
