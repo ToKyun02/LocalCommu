@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useCreatePost } from '@/queries/posts';
+import { useState } from 'react';
 
 export default function PostForm() {
   const form = useForm<z.infer<typeof postCreateSchema>>({
@@ -33,19 +35,30 @@ export default function PostForm() {
     },
     mode: 'onChange',
   });
-  const onSubmit = (values: z.infer<typeof postCreateSchema>) => {
-    // TODO: 리액트 쿼리 적용 후 변경할 로직입니다.
-    console.log(values);
+
+  const { mutateAsync: createPost } = useCreatePost();
+
+  const [open, setOpen] = useState(false);
+
+  const onSubmit = async (values: z.infer<typeof postCreateSchema>) => {
+    try {
+      await createPost(values);
+      setOpen(false);
+    } catch (error) {
+      alert(error);
+    } finally {
+      form.reset();
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button onClick={() => setOpen(true)}>
           <CiCirclePlus className='size-4' />새 글 작성
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className='rounded-xl'>
         <DialogHeader>
           <DialogTitle>새 글 작성</DialogTitle>
         </DialogHeader>

@@ -54,7 +54,7 @@ export default class PostDao {
     const totalCount = await db.post.count();
 
     const postsWithLikeCounts = posts.map((post) => ({
-      ...posts,
+      ...post,
       likeCount: post._count.postLikes,
       commentCount: post._count.comments,
       _count: undefined,
