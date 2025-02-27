@@ -1,8 +1,6 @@
 'use server';
 
 import bcrypt from 'bcryptjs';
-import { db } from '@/lib/db';
-
 import { z } from 'zod';
 import { signupSchema } from '@/schemas';
 import UserDao from '@/dao/user';
@@ -22,13 +20,7 @@ export async function signup(values: z.infer<typeof signupSchema>) {
 
   if (existingUser) return { error: '이미 가입한 사용자입니다.' };
 
-  await db.user.create({
-    data: {
-      name,
-      email,
-      password: hashedPassword,
-    },
-  });
+  const result = await UserDao.postUser(name, email, hashedPassword);
 
-  return { success: '회원가입이 완료되었습니다!' };
+  return result;
 }
