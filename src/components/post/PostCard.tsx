@@ -11,6 +11,7 @@ import { FaRegComment } from 'react-icons/fa';
 import Image from 'next/image';
 import emptyProfile from '@/assets/images/empty-profile.jpg';
 import { convertDateFormat } from '@/lib/convertDateFormat';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function PostCard({ post }: { post: Post }) {
   return (
@@ -36,13 +37,45 @@ export default function PostCard({ post }: { post: Post }) {
         </div>
       </CardHeader>
       <CardContent>
-        <p className='line-clamp-2 text-muted-foreground'>{post.content}</p>
+        <p className='line-clamp-1 text-muted-foreground'>{post.content}</p>
       </CardContent>
       <CardFooter>
         <div className='flex items-center gap-2'>
           <FaRegComment className='size-4' />
           <span className='text-sm'>{post.commentCount}</span>
           <span className='text-sm'>댓글</span>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export function PostCardSkeleton() {
+  return (
+    <Card className='h-[220px]'>
+      <CardHeader>
+        <div className='mb-4 flex items-center justify-between'>
+          <Skeleton className='h-7 w-3/4' />
+          <div className='flex items-center gap-2'>
+            <Skeleton className='h-4 w-4' />
+            <Skeleton className='h-4 w-8' />
+          </div>
+        </div>
+
+        <div className='flex items-center gap-2'>
+          <Skeleton className='h-6 w-6 rounded-lg' />
+          <Skeleton className='h-4 w-20' />
+          <Skeleton className='h-4 w-24' />
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Skeleton className='h-5 w-full' />
+      </CardContent>
+      <CardFooter>
+        <div className='flex items-center gap-2'>
+          <Skeleton className='h-4 w-4' />
+          <Skeleton className='h-4 w-8' />
+          <Skeleton className='h-4 w-8' />
         </div>
       </CardFooter>
     </Card>

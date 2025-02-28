@@ -25,6 +25,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useCreatePost } from '@/queries/posts';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getErrorMessage } from '@/lib/errorUtils';
 
 export default function PostForm() {
   const form = useForm<z.infer<typeof postCreateSchema>>({
@@ -39,15 +41,16 @@ export default function PostForm() {
   const { mutateAsync: createPost } = useCreatePost();
 
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (values: z.infer<typeof postCreateSchema>) => {
     try {
-      await createPost(values);
       setOpen(false);
-    } catch (error) {
-      alert(error);
-    } finally {
       form.reset();
+      await createPost(values);
+    } catch (error) {
+      alert(getErrorMessage(error));
+      router.push('/login');
     }
   };
 
