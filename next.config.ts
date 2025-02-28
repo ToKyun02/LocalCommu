@@ -6,15 +6,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'kakaocdn.net',
+        hostname: 'k.kakaocdn.net',
       },
       {
         protocol: 'https',
-        hostname: 'githubusercontent.com',
+        hostname: 'avatars.githubusercontent.com',
       },
       {
         protocol: 'https',
-        hostname: 'googleusercontent.com',
+        hostname: 'lh3.googleusercontent.com',
       },
       {
         protocol: 'https',
