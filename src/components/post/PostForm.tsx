@@ -27,6 +27,7 @@ import { useCreatePost } from '@/queries/posts';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getErrorMessage } from '@/lib/errorUtils';
+import { useToastStore } from '@/stores/ToastStore';
 
 export default function PostForm() {
   const form = useForm<z.infer<typeof postCreateSchema>>({
@@ -42,12 +43,20 @@ export default function PostForm() {
 
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { addToast } = useToastStore();
 
   const onSubmit = async (values: z.infer<typeof postCreateSchema>) => {
     try {
       setOpen(false);
       form.reset();
+      addToast({
+        message: '게시글을 업로드 중입니다...',
+      });
       await createPost(values);
+      addToast({
+        message: '게시글이 성공적으로 생성되었습니다!',
+        type: 'success',
+      });
     } catch (error) {
       alert(getErrorMessage(error));
       router.push('/login');

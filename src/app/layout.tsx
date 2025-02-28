@@ -3,6 +3,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import QueryClientProvider from '@/queries/Provider';
+import ToastContainer from '@/components/ui/Toast';
 
 const notoSansKr = Noto_Sans_KR({
   variable: '--font-noto-sans-kr',
@@ -26,6 +27,7 @@ export default function RootLayout({
         <QueryClientProvider>
           {children}
           <ReactQueryDevtools />
+          <ToastContainer />
         </QueryClientProvider>
       </body>
     </html>
