@@ -4,6 +4,7 @@ import { usePostsQuery } from '@/queries/posts';
 import PostCard, { PostCardSkeleton } from './PostCard';
 import Pagination from '../ui/Pagination';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
 
 const LIMIT = 10;
 
@@ -13,7 +14,20 @@ export default function PostList() {
 
   return (
     <div className='flex flex-col gap-2'>
-      {data?.posts.map((post) => <PostCard key={post.id} post={post} />)}
+      <AnimatePresence>
+        {data?.posts.map((post) => (
+          <motion.div
+            key={post.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.3 }}
+            layout
+          >
+            <PostCard post={post} />
+          </motion.div>
+        ))}
+      </AnimatePresence>
       {isLoading &&
         Array.from({ length: LIMIT }, (_, i) => <PostCardSkeleton key={i} />)}
       {data?.totalCount && (

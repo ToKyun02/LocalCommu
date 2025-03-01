@@ -28,6 +28,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getErrorMessage } from '@/lib/errorUtils';
 import { useToastStore } from '@/stores/ToastStore';
+import { useSubmitSpinnerStore } from '@/stores/SubmitSpinnerStore';
 
 export default function PostForm() {
   const form = useForm<z.infer<typeof postCreateSchema>>({
@@ -44,27 +45,39 @@ export default function PostForm() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const { addToast } = useToastStore();
+  const { setVisible } = useSubmitSpinnerStore();
 
   const onSubmit = async (values: z.infer<typeof postCreateSchema>) => {
     try {
+      setVisible(true);
+      await createPost(values);
       setOpen(false);
       form.reset();
-      addToast({
-        message: '게시글을 업로드 중입니다...',
-      });
-      await createPost(values);
+      setVisible(false);
       addToast({
         message: '게시글이 성공적으로 생성되었습니다!',
         type: 'success',
       });
     } catch (error) {
-      alert(getErrorMessage(error));
+      setOpen(false);
+      form.reset();
+      setVisible(false);
+      addToast({
+        message: getErrorMessage(error),
+        type: 'error',
+      });
       router.push('/login');
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        if (!isOpen) form.reset();
+      }}
+    >
       <DialogTrigger asChild>
         <Button onClick={() => setOpen(true)}>
           <CiCirclePlus className='size-4' />새 글 작성
@@ -87,7 +100,12 @@ export default function PostForm() {
                 <FormItem>
                   <FormLabel className='text-gray-900'>제목</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder='제목 입력' type='text' />
+                    <Input
+                      {...field}
+                      placeholder='제목 입력'
+                      type='text'
+                      disabled={form.formState.isSubmitting}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -104,13 +122,16 @@ export default function PostForm() {
                       {...field}
                       placeholder='내용 입력'
                       className='h-40 resize-none'
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button className='w-full'>생성</Button>
+            <Button className='w-full' disabled={form.formState.isSubmitting}>
+              생성
+            </Button>
           </form>
         </Form>
       </DialogContent>
