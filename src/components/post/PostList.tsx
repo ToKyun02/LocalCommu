@@ -2,7 +2,7 @@
 
 import { usePostsQuery } from '@/queries/posts';
 import PostCard, { PostCardSkeleton } from './PostCard';
-import Pagination from '../ui/Pagination';
+import Pagination, { PaginationSkeleton } from '../ui/Pagination';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
 
@@ -28,8 +28,14 @@ export default function PostList() {
           </motion.div>
         ))}
       </AnimatePresence>
-      {isLoading &&
-        Array.from({ length: LIMIT }, (_, i) => <PostCardSkeleton key={i} />)}
+      {isLoading && (
+        <>
+          {Array.from({ length: LIMIT }, (_, i) => (
+            <PostCardSkeleton key={i} />
+          ))}
+          <PaginationSkeleton />
+        </>
+      )}
       {data?.totalCount && (
         <Pagination
           totalCount={data?.totalCount}
