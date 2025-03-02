@@ -2,6 +2,7 @@
 
 import { Dispatch, SetStateAction } from 'react';
 import { Button } from './button';
+import { Skeleton } from './skeleton';
 
 interface PaginationProps {
   totalCount: number;
@@ -51,7 +52,7 @@ export default function Pagination({
   };
 
   return (
-    <div className='flex items-center justify-center gap-2'>
+    <div className='my-6 flex items-center justify-center gap-2'>
       <Button variant='outline' disabled={!isPrev} onClick={onPrevPage}>
         이전
       </Button>
@@ -68,6 +69,20 @@ export default function Pagination({
       <Button variant='outline' disabled={!isNext} onClick={onNextPage}>
         이후
       </Button>
+    </div>
+  );
+}
+
+export function PaginationSkeleton() {
+  return (
+    <div className='my-6 flex items-center justify-center gap-2'>
+      <Skeleton className='h-9 w-16' />
+
+      {Array.from({ length: 5 }).map((_, i) => (
+        <Skeleton key={i} className='h-9 w-9' />
+      ))}
+
+      <Skeleton className='h-9 w-16' />
     </div>
   );
 }
